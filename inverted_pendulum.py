@@ -1,7 +1,5 @@
 import numpy as np
 import matplotlib.pyplot as plt
-from math import pi,cos 
-
 """
     Adaptative PD controler for inverted pendulum
 """
@@ -20,16 +18,44 @@ class Pendulum:
 """
 
 
+def draw_pendulum(l = 0.1,tht_i = 0):
+    
+    
+    # Get coords
+    x_coord = l*np.cos(tht_i)
+    y_coord = l*np.sin(tht_i)
+
+    #Circle
+    theta = np.linspace( 0 , 2 * np.pi , 150 )
+    rad = 0.2
+    a = rad * np.cos( theta ) + x_coord
+    b = rad * np.sin( theta ) + y_coord
+    plt.figure("animation")
+    plt.clf()
+    plt.gcf().canvas.mpl_connect(
+    'key_release_event',
+    lambda event: [exit(0) if event.key == 'escape' else None])
+    plt.plot(a, b)
+    plt.xlim(-2,2)
+    plt.ylim(-2,2)
+
+
+    # Line
+    plt.plot([0, x_coord], [0, y_coord])
+    plt.pause(0.00001)
+    plt.show()
+    
 
 
 
 def main():
+    
     # desired position
-    th_des = pi/4
+    th_des = (np.pi)/2
 
     # neuron weights ( these will be the control gains kp, kd  respectively)
     w_1 = 4.0
-    w_2 = 5.0
+    w_2 = 0.0
 
     # Learning Factor
     eta_1 = 0.01
@@ -44,8 +70,8 @@ def main():
     n = int(s/t)
 
     # initial position and velocity
-    th_i = pi/4 - 0.05
-    thd_i = 0
+    th_i = (np.pi)/4 + 0.05 * 0
+    thd_i = 0.0
 
     # pendulum parameters (mass, length, gravity, friction coefficient  respectively)
     m = 0.5
@@ -58,7 +84,9 @@ def main():
     th_i_plot = np.zeros(n)
     ctrl_plot = np.zeros(n)  
     gain_plot =  np.zeros((2,n))  
+
     for i in range(0,n):
+        draw_pendulum(l,th_i)
         e = th_des - th_i
 
         x_1 = e #P
@@ -70,7 +98,7 @@ def main():
         u = x_1*w_1 + x_2*w_2
 
         #System
-        thdd_i = u/(m*l**2) - (g/l)*cos(th_i) - B/(m*l**2)*thd_i
+        thdd_i = u/(m*l**2) - (g/l)*np.cos(th_i) - B/(m*l**2)*thd_i
         thd_i = thd_i + thdd_i*t
         th_i = th_i + thd_i*t + 0.5*thdd_i*t**2
 
@@ -88,6 +116,7 @@ def main():
         ctrl_plot[i] = thdd_i
         gain_plot[0,i] = w_1
         gain_plot[1,i] = w_2
+
 
     t_plot = np.arange(t,s+t,t)
 
@@ -117,6 +146,7 @@ def main():
     plt.legend()
 
     plt.show()
+
 
 
 if __name__ == "__main__":
