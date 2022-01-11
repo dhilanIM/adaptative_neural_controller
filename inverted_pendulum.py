@@ -4,20 +4,6 @@ import matplotlib.pyplot as plt
     Adaptative PD controler for inverted pendulum
 """
 
-"""
-class Pendulum:
-    def __init__(self,m,l,b) -> None:
-        self.mass = m
-        self.length = l
-        self.friction = b
-        self.gravity = 9.81
-
-    def movePendulum(self) -> None:
-        pass
-
-"""
-
-
 def draw_pendulum(l = 0.1,tht_i = 0):
     
     
