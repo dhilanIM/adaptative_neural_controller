@@ -29,7 +29,7 @@ def draw_pendulum(l = 0.1,tht_i = 0):
     # Line
     plt.plot([0, x_coord], [0, y_coord])
     plt.pause(0.00001)
-    plt.show()
+    plt.ion()
     
 
 
